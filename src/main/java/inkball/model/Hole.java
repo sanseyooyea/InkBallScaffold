@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 /**
  * @author SanseYooyea
  */
-public class Hole extends GameObject{
+public class Hole extends GameObject {
     @Nullable
     private final Color color;
 

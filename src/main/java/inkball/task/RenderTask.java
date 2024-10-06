@@ -1,7 +1,5 @@
 package inkball.task;
 
-import inkball.model.Game;
-
 /**
  * @author SanseYooyea
  */

@@ -6,7 +6,14 @@
       "spawn_interval": 10,
       "score_increase_from_hole_capture_modifier": 1.0,
       "score_decrease_from_wrong_hole_modifier": 1.0,
-      "balls": ["blue", "orange", "grey", "blue", "green", "yellow"]
+      "balls": [
+        "blue",
+        "orange",
+        "grey",
+        "blue",
+        "green",
+        "yellow"
+      ]
     },
     {
       "layout": "level2.txt",
@@ -14,7 +21,16 @@
       "spawn_interval": 6,
       "score_increase_from_hole_capture_modifier": 1.2,
       "score_decrease_from_wrong_hole_modifier": 1.1,
-      "balls": ["green", "grey", "grey", "blue", "yellow", "orange", "blue", "grey"]
+      "balls": [
+        "green",
+        "grey",
+        "grey",
+        "blue",
+        "yellow",
+        "orange",
+        "blue",
+        "grey"
+      ]
     },
     {
       "layout": "level3.txt",
@@ -22,7 +38,16 @@
       "spawn_interval": 5,
       "score_increase_from_hole_capture_modifier": 1.3,
       "score_decrease_from_wrong_hole_modifier": 1.3,
-      "balls": ["grey", "grey", "grey", "grey", "grey", "grey", "grey", "grey"]
+      "balls": [
+        "grey",
+        "grey",
+        "grey",
+        "grey",
+        "grey",
+        "grey",
+        "grey",
+        "grey"
+      ]
     }
   ],
   "score_increase_from_hole_capture": {
