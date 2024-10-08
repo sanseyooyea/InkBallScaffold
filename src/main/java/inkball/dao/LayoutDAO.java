@@ -6,8 +6,6 @@ import inkball.model.GameObjectType;
 import inkball.model.Layout;
 
 import java.io.File;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +13,7 @@ import java.util.List;
  * @author SanseYooyea
  */
 public class LayoutDAO {
-    public Layout load(int level) {
-        File levelFile = new File("level" + level + ".txt");
+    public Layout load(File levelFile) {
         String content = FileUtils.readFile(levelFile);
         if (content == null) {
             return null;
@@ -30,14 +27,27 @@ public class LayoutDAO {
                 char b = charArray[x];
                 GameObjectType gameObjectType = GameObjectType.fromSymbol(b);
                 if (gameObjectType == null) {
-                    throw new IllegalArgumentException("Invalid character in level file: " + b);
+                    if (Character.isDigit(b)) {
+                        gameObjectType = GameObjectType.WALL;
+                        int number = Character.getNumericValue(b);
+                        gameObjects.add(GameObjectType.createGameObject(gameObjectType, x, y, Color.getColorByNumber(number)));
+                        continue;
+                    } else  {
+                        throw new IllegalArgumentException("Invalid character in level file: " + levelFile.getName() + " at position " + x + ", " + y);
+                    }
                 }
 
-                if (gameObjectType == GameObjectType.SPACE) {
+                if (gameObjectType == GameObjectType.TILE) {
                     continue;
                 }
 
                 int number = -1;
+                if (x + 1 > charArray.length - 1) {
+                    GameObject gameObject = GameObjectType.createGameObject(gameObjectType, x, y);
+                    gameObjects.add(gameObject);
+                    continue;
+                }
+
                 char nextCharacter = charArray[x + 1];
                 if (Character.isDigit(nextCharacter)) {
                     number = Character.getNumericValue(nextCharacter);
