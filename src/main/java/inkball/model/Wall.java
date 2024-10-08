@@ -23,22 +23,6 @@ public class Wall extends GameObject implements Colorable {
         // 处理与球的反射逻辑
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
     @Override
     @Nullable
     public Color getColor() {

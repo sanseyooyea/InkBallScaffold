@@ -16,9 +16,9 @@ public class Level {
     private final double scoreIncrementModifier;
     @SerializedName("score_decrease_from_wrong_hole_modifier")
     private final double scoreDecrementModifier;
-    private final List<Ball> balls;
+    private final List<Color> balls;
 
-    public Level(Layout layout, int time, int spawnInterval, double scoreIncrementModifier, double scoreDecrementModifier, List<Ball> balls) {
+    public Level(Layout layout, int time, int spawnInterval, double scoreIncrementModifier, double scoreDecrementModifier, List<Color> balls) {
         this.layout = layout;
         this.time = time;
         this.spawnInterval = spawnInterval;
@@ -47,7 +47,7 @@ public class Level {
         return scoreDecrementModifier;
     }
 
-    public List<Ball> getBalls() {
+    public List<Color> getBalls() {
         return balls;
     }
 
