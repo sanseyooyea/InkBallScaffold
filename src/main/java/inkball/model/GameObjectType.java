@@ -8,7 +8,7 @@ import java.util.Arrays;
 public enum GameObjectType {
     BALL('B'),
     HOLE('H'),
-    SPACE(' '),
+    TILE(' '),
     SPAWNER('S'),
     WALL('X');
 
