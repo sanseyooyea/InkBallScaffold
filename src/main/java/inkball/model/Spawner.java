@@ -5,7 +5,7 @@ package inkball.model;
  */
 public class Spawner extends GameObject {
     protected Spawner(double x, double y) {
-        super(x, y);
+        super(GameObjectType.SPAWNER, x, y);
     }
 
     public Ball spawnBall(Color color) {

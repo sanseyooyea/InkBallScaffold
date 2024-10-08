@@ -1,9 +1,12 @@
 package inkball;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class App extends PApplet {
@@ -16,9 +19,9 @@ public class App extends PApplet {
     public static final int BOARD_HEIGHT = 20;
     public static final int INITIAL_PARACHUTES = 1;
     public static final int FPS = 30;
-    public static int WIDTH = 576; //CELLSIZE*BOARD_WIDTH;
+    public static int WIDTH = 576;
     public static final int BOARD_WIDTH = WIDTH / CELLSIZE;
-    public static int HEIGHT = 640; //BOARD_HEIGHT*CELLSIZE+TOPBAR;
+    public static int HEIGHT = 640;
     public static Random random = new Random();
     public String configPath;
 
@@ -49,11 +52,8 @@ public class App extends PApplet {
         //See PApplet javadoc:
         //loadJSONObject(configPath)
         // the image is loaded from relative path: "src/main/resources/inkball/..."
-		/*try {
-            result = loadImage(URLDecoder.decode(this.getClass().getResource(filename+".png").getPath(), StandardCharsets.UTF_8.name()));
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }*/
+        PImage result = loadImage(URLDecoder.decode(this.getClass().getResource("ball0" + ".png").getPath(), StandardCharsets.UTF_8));
+        image(result, 0, 0);
     }
 
     /**

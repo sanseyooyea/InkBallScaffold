@@ -1,15 +1,21 @@
 package inkball.model;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * @author SanseYooyea
  */
-public class Wall {
-    private int x, y; // 墙的位置
-    private int color; // 墙的颜色
+public class Wall extends GameObject implements Colorable {
+    @Nullable
+    private Color color;
 
-    public Wall(int x, int y, int color) {
-        this.x = x;
-        this.y = y;
+    public Wall(double x, double y) {
+        super(GameObjectType.WALL, x, y);
+    }
+
+    public Wall(double x, double y, @NotNull Color color) {
+        super(GameObjectType.WALL, x, y);
         this.color = color;
     }
 
@@ -33,11 +39,13 @@ public class Wall {
         this.y = y;
     }
 
-    public int getColor() {
+    @Override
+    @Nullable
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(int color) {
+    public void setColor(@NotNull Color color) {
         this.color = color;
     }
 }

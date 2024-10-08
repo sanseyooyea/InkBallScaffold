@@ -2,31 +2,24 @@ package inkball.model;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
-
 /**
  * @author SanseYooyea
  */
-public class Hole extends GameObject {
-    @Nullable
+public class Hole extends GameObject implements Colorable {
+    @NotNull
     private final Color color;
 
-    public Hole(double x, double y) {
-        super(GameObjectType.HOLE, x, y);
-        this.color = null;
-    }
-
     public Hole(double x, double y, @NotNull Color color) {
-        super(x, y);
+        super(GameObjectType.HOLE, x, y);
         this.color = color;
     }
 
     public boolean captureBall(Ball ball) {
-        // 检查球的颜色并决定是否得分
+        return ball.getColor() == color;
     }
 
-    @Nullable
-    public Color getColor() {
+    @Override
+    public @NotNull Color getColor() {
         return color;
     }
 }

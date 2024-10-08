@@ -5,7 +5,7 @@ package inkball.model;
  */
 public class Game {
     private Level currentLevel;
-    private int score;
+    private final int score;
     private boolean isPaused;
 
     public Game(String configFilePath) {

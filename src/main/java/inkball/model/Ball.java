@@ -1,14 +1,17 @@
 package inkball.model;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author SanseYooyea
  */
-public class Ball extends GameObject implements Updatable {
+public class Ball extends GameObject implements Updatable, Colorable {
+    @NotNull
+    private final Color color;
     private float vx, vy;
-    private Color color;
-    private boolean isCaptured;
+    private final boolean isCaptured;
 
-    public Ball(double x, double y, Color color) {
+    public Ball(double x, double y, @NotNull Color color) {
         super(GameObjectType.BALL, x, y);
         this.color = color;
         this.isCaptured = false;
@@ -24,7 +27,7 @@ public class Ball extends GameObject implements Updatable {
         // 检查与墙壁的碰撞并处理反射
     }
 
-    public void checkCollision(Line line) {
+    public void checkCollision(InkLine inkLine) {
         // 检查与玩家画线的碰撞
     }
 
@@ -34,17 +37,11 @@ public class Ball extends GameObject implements Updatable {
 
     public boolean isInHole(Hole hole) {
         // 检查是否进入洞口
+        return true;
     }
 
-    public float getVx() {
-        return vx;
-    }
-
-    public float getVy() {
-        return vy;
-    }
-
-    public Color getColor() {
+    @Override
+    public @NotNull Color getColor() {
         return color;
     }
 
