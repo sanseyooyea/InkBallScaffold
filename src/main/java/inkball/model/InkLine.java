@@ -12,6 +12,7 @@ public class InkLine implements Updatable {
     public final float lineThickness = 5;
     private final PApplet sketch;
     public ArrayList<Line> line;
+
     public InkLine(PApplet sketch) {
         this.sketch = sketch;
         line = new ArrayList<>();

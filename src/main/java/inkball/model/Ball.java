@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 public class Ball extends GameObject implements Updatable, Colorable {
     @NotNull
     private final Color color;
-    private float vx, vy;
     private final boolean isCaptured;
+    private float vx, vy;
 
     public Ball(double x, double y, @NotNull Color color) {
         super(GameObjectType.BALL, x, y);

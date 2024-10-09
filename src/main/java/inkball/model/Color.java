@@ -16,10 +16,6 @@ public enum Color {
         this.number = number;
     }
 
-    public int getNumber() {
-        return number;
-    }
-
     public static Color getColor(String color) {
         switch (color) {
             case "GREY":
@@ -52,5 +48,9 @@ public enum Color {
             default:
                 return null;
         }
+    }
+
+    public int getNumber() {
+        return number;
     }
 }

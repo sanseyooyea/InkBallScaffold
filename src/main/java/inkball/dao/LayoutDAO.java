@@ -33,7 +33,7 @@ public class LayoutDAO {
                         int number = Character.getNumericValue(b);
                         gameObjects.add(GameObjectType.createGameObject(gameObjectType, x, y, Color.getColorByNumber(number)));
                         continue;
-                    } else  {
+                    } else {
                         throw new IllegalArgumentException("Invalid character in level file: " + levelFile.getName() + " at position " + x + ", " + y);
                     }
                 }
