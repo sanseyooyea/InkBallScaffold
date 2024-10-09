@@ -55,7 +55,11 @@ public class App extends PApplet {
         if (event.getKey() == 'p') {
             game.pause();
         } else if (event.getKey() == 'r') {
-            game.restartLevel();
+            if (game.isEnd()) {
+                game.restart();
+            } else {
+                game.restartLevel();
+            }
         } else if (event.getKey() == 'n') {
             game.nextLevel();
         }
