@@ -1,5 +1,7 @@
 package inkball.model;
 
+import inkball.App;
+
 /**
  * @author SanseYooyea
  */
@@ -24,5 +26,21 @@ public abstract class GameObject {
 
     public double getY() {
         return y;
+    }
+
+    public double getTop() {
+        return y * App.CELL_SIZE + App.TOP_BAR_HEIGHT;
+    }
+
+    public double getBottom() {
+        return y * App.CELL_SIZE + App.CELL_SIZE + App.TOP_BAR_HEIGHT;
+    }
+
+    public double getLeft() {
+        return x * App.CELL_SIZE;
+    }
+
+    public double getRight() {
+        return x * App.CELL_SIZE + App.CELL_SIZE;
     }
 }
