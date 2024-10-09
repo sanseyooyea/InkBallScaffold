@@ -10,7 +10,6 @@ import processing.event.MouseEvent;
 public class App extends PApplet {
 
     public static final int CELL_SIZE = 32;
-    public static final int CELL_HEIGHT = 32;
     public static final int TOP_BAR_HEIGHT = 64;
     public static final int FPS = 30;
     public static int WIDTH = 576;
@@ -55,6 +54,10 @@ public class App extends PApplet {
     public void keyPressed(KeyEvent event) {
         if (event.getKey() == 'p') {
             game.pause();
+        } else if (event.getKey() == 'r') {
+            game.restartLevel();
+        } else if (event.getKey() == 'n') {
+            game.nextLevel();
         }
     }
 
@@ -106,7 +109,8 @@ public class App extends PApplet {
 
         textSize(20);
         text("Score: " + game.getScore(), 448, 20);
-        text("Time: " + game.getCurrentLevel().getTime(), 448, 40);
+        // time取整
+        text("Time: " + String.valueOf(game.getTimeLeft()).split("\\.")[0], 448, 40);
 
         // draw tiles
         for (int x = 0; x < WIDTH / CELL_SIZE; x++) {
@@ -133,5 +137,13 @@ public class App extends PApplet {
 
         // draw spawners
         game.getCurrentLevel().getLayout().getSpawners().forEach(spawner -> image(Image.getImage(spawner.getType()).getImage(), (float) spawner.getX() * CELL_SIZE, TOP_BAR_HEIGHT + (float) spawner.getY() * CELL_SIZE));
+
+        if (game.isEnd()) {
+            fill(0, 0, 0);
+            rect(160, 256, 192, 160);
+            fill(255, 255, 255);
+            textSize(20);
+            text("Game Over", 208, 326);
+        }
     }
 }
