@@ -27,6 +27,7 @@ public class LayoutDAO {
                 char b = charArray[x];
                 GameObjectType gameObjectType = GameObjectType.fromSymbol(b);
                 if (gameObjectType == null) {
+                    // 只有数字时的处理，代表墙的颜色
                     if (Character.isDigit(b)) {
                         gameObjectType = GameObjectType.WALL;
                         int number = Character.getNumericValue(b);
@@ -38,6 +39,13 @@ public class LayoutDAO {
                 }
 
                 if (gameObjectType == GameObjectType.TILE) {
+                    continue;
+                }
+
+                // X + 数字 时的处理
+                if (gameObjectType == GameObjectType.WALL) {
+                    GameObject gameObject = GameObjectType.createGameObject(gameObjectType, x, y);
+                    gameObjects.add(gameObject);
                     continue;
                 }
 

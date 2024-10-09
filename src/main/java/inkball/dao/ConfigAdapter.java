@@ -20,8 +20,9 @@ public class ConfigAdapter implements JsonDeserializer<Config> {
     @Override
     public Config deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         JsonObject jsonObject = jsonElement.getAsJsonObject();
-        List<Level> levels = new ArrayList<>();
+        Map<Integer, Level> levels = new HashMap<>();
         JsonArray levelsJsonArray = jsonObject.getAsJsonArray("levels");
+        final int[] levelNumber = {1};
         levelsJsonArray.forEach(levelJson -> {
             JsonObject levelJsonObject = levelJson.getAsJsonObject();
             String layoutPath = levelJsonObject.get("layout").getAsString();
@@ -43,7 +44,8 @@ public class ConfigAdapter implements JsonDeserializer<Config> {
             });
 
             Level level = new Level(layout, time, spawnInterval, scoreIncrementModifier, scoreDecrementModifier, balls);
-            levels.add(level);
+            levels.put(levelNumber[0], level);
+            levelNumber[0]++;
         });
 
         Map<Color, Integer> scoreIncrement = new HashMap<>();

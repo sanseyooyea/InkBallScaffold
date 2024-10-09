@@ -12,19 +12,19 @@ import java.util.Map;
  */
 @JsonAdapter(ConfigAdapter.class)
 public class Config {
-    private List<Level> levels;
+    private Map<Integer, Level> levels;
     @SerializedName("score_increase_from_hole_capture")
     private Map<Color, Integer> scoreIncrement;
     @SerializedName("score_decrease_from_inkball_capture")
     private Map<Color, Integer> scoreDecrement;
 
-    public Config(List<Level> levels, Map<Color, Integer> scoreIncrement, Map<Color, Integer> scoreDecrement) {
+    public Config(Map<Integer, Level> levels, Map<Color, Integer> scoreIncrement, Map<Color, Integer> scoreDecrement) {
         this.levels = levels;
         this.scoreIncrement = scoreIncrement;
         this.scoreDecrement = scoreDecrement;
     }
 
-    public List<Level> getLevels() {
+    public Map<Integer, Level> getLevels() {
         return levels;
     }
 

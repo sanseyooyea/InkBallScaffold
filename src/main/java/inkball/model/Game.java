@@ -1,28 +1,57 @@
 package inkball.model;
 
+import inkball.service.IConfigService;
+import inkball.service.impl.ConfigServiceImpl;
+
 /**
  * @author SanseYooyea
  */
 public class Game {
-    private Level currentLevel;
     private final int score;
+    private IConfigService configService;
+    private int currentLevelNumber;
+    private Level currentLevel;
     private boolean isPaused;
+    private boolean end;
 
-    public Game(String configFilePath) {
+    public Game() {
         // 初始化游戏，加载第一个关卡
-
+        configService = new ConfigServiceImpl();
+        currentLevelNumber = 1;
+        currentLevel = configService.getConfig().getLevels().get(currentLevelNumber).clone();
         this.score = 0;
         this.isPaused = false;
+        end = false;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public Level getCurrentLevel() {
+        return currentLevel;
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public boolean isEnd() {
+        return end;
     }
 
     public void update() {
+        if (end) {
+            return;
+        }
+
         if (!isPaused) {
             currentLevel.update();
         }
-    }
 
-    public void draw() {
-        // 绘制游戏界面
+        if (currentLevel.getLayout().isAllBallsCaptured()) {
+            nextLevel();
+        }
     }
 
     public void pause() {
@@ -30,10 +59,19 @@ public class Game {
     }
 
     public void restartLevel() {
-        // 重新开始当前关卡
+        currentLevel = configService.getConfig().getLevels().get(currentLevelNumber).clone();
     }
 
     public void nextLevel() {
-        // 加载下一个关卡
+        if (currentLevelNumber < configService.getConfig().getLevels().size()) {
+            currentLevelNumber++;
+            currentLevel = configService.getConfig().getLevels().get(currentLevelNumber).clone();
+        } else {
+           end();
+        }
+    }
+
+    public void end() {
+        end = true;
     }
 }
