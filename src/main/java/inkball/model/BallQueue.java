@@ -14,7 +14,7 @@ public class BallQueue {
     public BallQueue(List<Color> balls) {
         Collections.shuffle(balls);
         ballQueue = new ArrayBlockingQueue<>(balls.size());
-//        ballQueue.addAll(balls);
+        ballQueue.addAll(balls);
     }
 
     public Color getBall() {
