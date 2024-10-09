@@ -27,6 +27,8 @@ public enum GameObjectType {
 
     public static GameObject createGameObject(GameObjectType type, double x, double y) {
         switch (type) {
+            case TILE:
+                return new Tile(x, y);
             case SPAWNER:
                 return new Spawner(x, y);
             case WALL:
