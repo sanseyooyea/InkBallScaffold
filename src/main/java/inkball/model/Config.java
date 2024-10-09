@@ -4,7 +4,6 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import inkball.dao.ConfigAdapter;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,7 +11,7 @@ import java.util.Map;
  */
 @JsonAdapter(ConfigAdapter.class)
 public class Config {
-    private Map<Integer, Level> levels;
+    private final Map<Integer, Level> levels;
     @SerializedName("score_increase_from_hole_capture")
     private Map<Color, Integer> scoreIncrement;
     @SerializedName("score_decrease_from_inkball_capture")

@@ -8,9 +8,10 @@ import inkball.service.impl.ConfigServiceImpl;
  */
 public class Game {
     private final int score;
-    private IConfigService configService;
+    private final IConfigService configService;
     private int currentLevelNumber;
     private Level currentLevel;
+    private final BallQueue ballQueue;
     private boolean isPaused;
     private boolean end;
 
@@ -19,6 +20,7 @@ public class Game {
         configService = new ConfigServiceImpl();
         currentLevelNumber = 1;
         currentLevel = configService.getConfig().getLevels().get(currentLevelNumber).clone();
+        ballQueue = new BallQueue(currentLevel.getBalls());
         this.score = 0;
         this.isPaused = false;
         end = false;
@@ -67,7 +69,7 @@ public class Game {
             currentLevelNumber++;
             currentLevel = configService.getConfig().getLevels().get(currentLevelNumber).clone();
         } else {
-           end();
+            end();
         }
     }
 
