@@ -17,6 +17,7 @@ public enum Color {
     }
 
     public static Color getColor(String color) {
+        color = color.toUpperCase();
         switch (color) {
             case "GREY":
                 return GREY;
