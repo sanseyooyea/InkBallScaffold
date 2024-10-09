@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author SanseYooyea
  */
-public class Layout {
+public class Layout implements Cloneable {
     private final List<Ball> balls = new ArrayList<>();
     private final List<Wall> walls = new ArrayList<>();
     private final List<Hole> holes = new ArrayList<>();
@@ -27,6 +27,22 @@ public class Layout {
         });
     }
 
+    public List<Ball> getBalls() {
+        return balls;
+    }
+
+    public List<Wall> getWalls() {
+        return walls;
+    }
+
+    public List<Hole> getHoles() {
+        return holes;
+    }
+
+    public List<Spawner> getSpawners() {
+        return spawners;
+    }
+
     public void update() {
         // 更新所有球的位置，检查碰撞
         for (Ball ball : balls) {
@@ -37,5 +53,26 @@ public class Layout {
 
     private void checkCollisions(Ball ball) {
         // 检查球与墙、线、洞的碰撞
+    }
+
+    public boolean isAllBallsCaptured() {
+        // 检查所有球是否都被洞吸收
+        return balls.stream().allMatch(Ball::isCaptured);
+    }
+
+    @Override
+    public Layout clone() {
+        try {
+            super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<GameObject> gameObjects = new ArrayList<>();
+        gameObjects.addAll(balls);
+        gameObjects.addAll(walls);
+        gameObjects.addAll(holes);
+        gameObjects.addAll(spawners);
+        return new Layout(gameObjects);
     }
 }

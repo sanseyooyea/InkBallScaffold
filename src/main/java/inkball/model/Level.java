@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author SanseYooyea
  */
-public class Level {
+public class Level implements Cloneable {
     private final Layout layout;
     private final int time;
     @SerializedName("spawn_interval")
@@ -53,5 +53,16 @@ public class Level {
 
     public void update() {
 
+    }
+
+    @Override
+    public Level clone() {
+        try {
+            super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+
+        return new Level(layout.clone(), time, spawnInterval, scoreIncrementModifier, scoreDecrementModifier, balls);
     }
 }
