@@ -1,34 +1,29 @@
 package inkball;
 
+import inkball.model.Game;
+import inkball.view.Image;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Random;
-
 public class App extends PApplet {
 
-    public static final int CELLSIZE = 32; //8;
-    public static final int CELLHEIGHT = 32;
-
-    public static final int CELLAVG = 32;
-    public static final int TOPBAR = 64;
-    public static final int BOARD_HEIGHT = 20;
-    public static final int INITIAL_PARACHUTES = 1;
+    public static final int CELL_SIZE = 32;
+    public static final int CELL_HEIGHT = 32;
+    public static final int TOP_BAR_HEIGHT = 64;
     public static final int FPS = 30;
     public static int WIDTH = 576;
-    public static final int BOARD_WIDTH = WIDTH / CELLSIZE;
     public static int HEIGHT = 640;
-    public static Random random = new Random();
-    public String configPath;
-
-    // Feel free to add any additional methods or attributes you want. Please put classes in different files.
+    private static App instance;
+    private Game game;
 
     public App() {
-        this.configPath = "config.json";
+        instance = this;
+    }
+
+    public static App getInstance() {
+        return instance;
     }
 
     public static void main(String[] args) {
@@ -48,12 +43,9 @@ public class App extends PApplet {
      */
     @Override
     public void setup() {
+        surface.setTitle("Inkball");
         frameRate(FPS);
-        //See PApplet javadoc:
-        //loadJSONObject(configPath)
-        // the image is loaded from relative path: "src/main/resources/inkball/..."
-        PImage result = loadImage(URLDecoder.decode(this.getClass().getResource("ball0" + ".png").getPath(), StandardCharsets.UTF_8));
-        image(result, 0, 0);
+        game = new Game();
     }
 
     /**
@@ -61,7 +53,9 @@ public class App extends PApplet {
      */
     @Override
     public void keyPressed(KeyEvent event) {
-
+        if (event.getKey() == 'p') {
+            game.pause();
+        }
     }
 
     /**
@@ -95,22 +89,49 @@ public class App extends PApplet {
      */
     @Override
     public void draw() {
+        if (game.isPaused()) {
+            return;
+        }
 
+        game.update();
 
-        //----------------------------------
-        //display Board for current level:
-        //----------------------------------
-        //TODO
+        fill(206, 206, 206);
+        rect(0, 0, WIDTH, TOP_BAR_HEIGHT);
 
-        //----------------------------------
-        //display score
-        //----------------------------------
-        //TODO
+        fill(0, 0, 0);
+        rect(8, 8, 160, 32);
 
-        //----------------------------------
-        //----------------------------------
-        //display game end message
+        textSize(16);
+        text(String.valueOf(game.getCurrentLevel().getScoreIncrementModifier()), 192, 40);
 
+        textSize(20);
+        text("Score: " + game.getScore(), 448, 20);
+        text("Time: " + game.getCurrentLevel().getTime(), 448, 40);
+
+        // draw tiles
+        for (int x = 0; x < WIDTH / CELL_SIZE; x++) {
+            for (int y = 0; y < (HEIGHT - TOP_BAR_HEIGHT) / CELL_SIZE; y++) {
+                image(Image.TILE.getImage(), (float) x * CELL_SIZE, TOP_BAR_HEIGHT + (float) y * CELL_SIZE);
+            }
+        }
+
+        // draw balls
+        game.getCurrentLevel().getLayout().getBalls().forEach(ball -> image(Image.getImage(ball.getType(), ball.getColor().getNumber()).getImage(), (float) ball.getX() * CELL_SIZE, TOP_BAR_HEIGHT + (float) ball.getY() * CELL_SIZE));
+
+        // draw walls
+        game.getCurrentLevel().getLayout().getWalls().forEach(wall -> {
+            PImage wallImage = Image.WALL0.getImage();
+            if (wall.getColor() != null) {
+                wallImage = Image.getImage(wall.getType(), wall.getColor().getNumber()).getImage();
+            }
+
+            image(wallImage, (float) wall.getX() * CELL_SIZE, TOP_BAR_HEIGHT + (float) wall.getY() * CELL_SIZE);
+        });
+
+        // draw holes
+        game.getCurrentLevel().getLayout().getHoles().forEach(hole -> image(Image.getImage(hole.getType(), hole.getColor().getNumber()).getImage(), (float) hole.getX() * CELL_SIZE, TOP_BAR_HEIGHT + (float) hole.getY() * CELL_SIZE));
+
+        // draw spawners
+        game.getCurrentLevel().getLayout().getSpawners().forEach(spawner -> image(Image.getImage(spawner.getType()).getImage(), (float) spawner.getX() * CELL_SIZE, TOP_BAR_HEIGHT + (float) spawner.getY() * CELL_SIZE));
     }
-
 }

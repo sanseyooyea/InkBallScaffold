@@ -9,7 +9,7 @@ public class MainMenuView extends View {
     private Button start;
     private Button quit;
 
-    private int textSize = 20;
+    private final int textSize = 20;
 
     public MainMenuView(PApplet sketch, GameView gameView, int width, int height) {
         super(sketch, gameView, width, height);
