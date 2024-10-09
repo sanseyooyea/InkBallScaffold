@@ -4,18 +4,20 @@ package inkball.model;
  * @author SanseYooyea
  */
 public enum Color {
-    GREY(java.awt.Color.GRAY, 0),
-    ORANGE(java.awt.Color.ORANGE, 1),
-    BLUE(java.awt.Color.BLUE, 2),
-    GREEN(java.awt.Color.GREEN, 3),
-    YELLOW(java.awt.Color.YELLOW, 4);
+    GREY(0),
+    ORANGE(1),
+    BLUE(2),
+    GREEN(3),
+    YELLOW(4);
 
-    private final java.awt.Color color;
     private final int number;
 
-    Color(java.awt.Color color, int number) {
-        this.color = color;
+    Color(int number) {
         this.number = number;
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     public static Color getColor(String color) {
@@ -35,8 +37,8 @@ public enum Color {
         }
     }
 
-    public static Color getColorByNumber(int color) {
-        switch (color) {
+    public static Color getColorByNumber(int number) {
+        switch (number) {
             case 0:
                 return GREY;
             case 1:
@@ -50,9 +52,5 @@ public enum Color {
             default:
                 return null;
         }
-    }
-
-    public java.awt.Color getAwtColor() {
-        return color;
     }
 }
