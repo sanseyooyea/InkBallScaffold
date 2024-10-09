@@ -52,7 +52,10 @@ public class Layout implements Cloneable {
     }
 
     private void checkCollisions(Ball ball) {
-        // 检查球与墙、线、洞的碰撞
+        // 检查球与墙壁、洞口的碰撞
+        walls.forEach(ball::checkCollision);
+        holes.forEach(ball::checkHoleCollision);
+
     }
 
     public boolean isAllBallsCaptured() {
@@ -69,7 +72,7 @@ public class Layout implements Cloneable {
         }
 
         List<GameObject> gameObjects = new ArrayList<>();
-        gameObjects.addAll(balls);
+        balls.forEach(ball -> gameObjects.add(ball.clone()));
         gameObjects.addAll(walls);
         gameObjects.addAll(holes);
         gameObjects.addAll(spawners);

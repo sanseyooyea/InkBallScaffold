@@ -52,7 +52,7 @@ public class Level implements Cloneable {
     }
 
     public void update() {
-
+        layout.update();
     }
 
     @Override

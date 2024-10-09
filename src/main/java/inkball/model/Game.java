@@ -1,5 +1,6 @@
 package inkball.model;
 
+import inkball.App;
 import inkball.service.IConfigService;
 import inkball.service.impl.ConfigServiceImpl;
 
@@ -11,7 +12,8 @@ public class Game {
     private final IConfigService configService;
     private int currentLevelNumber;
     private Level currentLevel;
-    private final BallQueue ballQueue;
+    private float timeLeft;
+    private BallQueue ballQueue;
     private boolean isPaused;
     private boolean end;
 
@@ -20,6 +22,7 @@ public class Game {
         configService = new ConfigServiceImpl();
         currentLevelNumber = 1;
         currentLevel = configService.getConfig().getLevels().get(currentLevelNumber).clone();
+        timeLeft = currentLevel.getTime();
         ballQueue = new BallQueue(currentLevel.getBalls());
         this.score = 0;
         this.isPaused = false;
@@ -42,6 +45,10 @@ public class Game {
         return end;
     }
 
+    public float getTimeLeft() {
+        return timeLeft;
+    }
+
     public void update() {
         if (end) {
             return;
@@ -53,6 +60,12 @@ public class Game {
 
         if (currentLevel.getLayout().isAllBallsCaptured()) {
             nextLevel();
+            return;
+        }
+
+        timeLeft -= (float) 1 / App.FPS;
+        if (timeLeft <= 0) {
+            end();
         }
     }
 
@@ -62,12 +75,15 @@ public class Game {
 
     public void restartLevel() {
         currentLevel = configService.getConfig().getLevels().get(currentLevelNumber).clone();
+        ballQueue = new BallQueue(currentLevel.getBalls());
+        timeLeft = currentLevel.getTime();
     }
 
     public void nextLevel() {
         if (currentLevelNumber < configService.getConfig().getLevels().size()) {
             currentLevelNumber++;
             currentLevel = configService.getConfig().getLevels().get(currentLevelNumber).clone();
+            timeLeft = currentLevel.getTime();
         } else {
             end();
         }
@@ -75,5 +91,13 @@ public class Game {
 
     public void end() {
         end = true;
+    }
+
+    public void restart() {
+        currentLevelNumber = 1;
+        currentLevel = configService.getConfig().getLevels().get(currentLevelNumber).clone();
+        ballQueue = new BallQueue(currentLevel.getBalls());
+        timeLeft = currentLevel.getTime();
+        end = false;
     }
 }
