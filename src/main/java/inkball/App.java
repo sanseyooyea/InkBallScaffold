@@ -44,7 +44,7 @@ public class App extends PApplet {
     public void setup() {
         surface.setTitle("Inkball");
         frameRate(FPS);
-        game = new Game();
+        game = new Game(this);
     }
 
     /**
@@ -76,6 +76,13 @@ public class App extends PApplet {
     @Override
     public void mousePressed(MouseEvent e) {
         // create a new player-drawn line object
+        int button = e.getButton();
+        if (button != LEFT) {
+            return;
+        }
+
+        // start drawing a line
+        game.getInkLineService().startDraw(mouseX, mouseY);
     }
 
     @Override
@@ -88,7 +95,8 @@ public class App extends PApplet {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
+        // stop drawing a line
+        game.getInkLineService().stopDraw();
     }
 
     /**
@@ -142,6 +150,9 @@ public class App extends PApplet {
         // draw spawners
         game.getCurrentLevel().getLayout().getSpawners().forEach(spawner -> image(Image.getImage(spawner.getType()).getImage(), (float) spawner.getX() * CELL_SIZE, TOP_BAR_HEIGHT + (float) spawner.getY() * CELL_SIZE));
 
+        game.getInkLineService().draw(mouseX, mouseY, pmouseX, pmouseY);
+        game.getInkLineService().update();
+
         if (game.isEnd()) {
             fill(0, 0, 0);
             rect(160, 256, 192, 160);
@@ -149,5 +160,9 @@ public class App extends PApplet {
             textSize(20);
             text("Game Over", 208, 326);
         }
+    }
+
+    public Game getGame() {
+        return game;
     }
 }
