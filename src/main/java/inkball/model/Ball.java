@@ -9,10 +9,11 @@ import java.util.Random;
  * @author SanseYooyea
  */
 public class Ball extends GameObject implements Updatable, Colorable, Cloneable {
+    private static final Random RANDOM = new Random();
+    public final double radius = 12;
     @NotNull
     private final Color color;
-    private final boolean isCaptured;
-    private final Random RANDOM = new Random();
+    private boolean isCaptured;
     /**
      * 每秒移速
      */
@@ -33,6 +34,16 @@ public class Ball extends GameObject implements Updatable, Colorable, Cloneable 
     }
 
     @Override
+    public double getBottom() {
+        return y * App.CELL_SIZE + 2 * radius + App.TOP_BAR_HEIGHT;
+    }
+
+    @Override
+    public double getRight() {
+        return x * App.CELL_SIZE + 2 * radius;
+    }
+
+    @Override
     public void update() {
         if (isCaptured) {
             return;
@@ -45,7 +56,7 @@ public class Ball extends GameObject implements Updatable, Colorable, Cloneable 
     public void checkCollision(Wall wall) {
         // 检查与墙壁的碰撞并处理反射
         double ballRight = getRight();
-        double ballLeft =getLeft();
+        double ballLeft = getLeft();
         double ballTop = getTop();
         double ballBottom = getBottom();
 
@@ -54,42 +65,55 @@ public class Ball extends GameObject implements Updatable, Colorable, Cloneable 
         double wallTop = wall.getTop();
         double wallBottom = wall.getBottom();
 
-
-
         // 检测水平方向的碰撞
-        if (ballRight >= wallLeft && ballLeft <= wallRight) {
-            if (ballTop <= wallBottom && ballBottom >= wallTop) {
-                // 进行碰撞处理
-                if (reflecting) {
-                    return;
-                }
+        boolean horizontalCollision = ballRight >= wallLeft && ballLeft <= wallRight &&
+                ballBottom >= wallTop && ballTop <= wallBottom;
 
-                handleCollision(ballLeft, ballRight, ballTop, ballBottom, wallLeft, wallRight, wallTop, wallBottom);
-                reflecting = true;
-                System.out.println("Ball collided with wall");
-                System.out.println("Ball x: " + x + " y: " + y);
-                System.out.println("Ball vx: " + vx + " vy: " + vy);
-                System.out.println("Wall x: " + wall.getX() + " y: " + wall.getY());
+        // 检测垂直方向的碰撞
+        boolean verticalCollision = ballBottom >= wallTop && ballTop <= wallBottom &&
+                ballRight >= wallLeft && ballLeft <= wallRight;
+
+
+        if (horizontalCollision || verticalCollision) {
+            if (reflecting) {
                 return;
             }
 
-            reflecting = false;
-        }
-    }
+            if (wall.getColor() != null) {
+                wall.setColor(color);
+            }
 
-    private void handleCollision(double ballLeft, double ballRight, double ballTop, double ballBottom,
-                                 double wallLeft, double wallRight, double wallTop, double wallBottom) {
-        // 水平碰撞检测（左或右墙）
-        if ((ballRight >= wallLeft && vx > 0) || (ballLeft <= wallRight && vx < 0)) {
-            // 反转水平速度
-            vx = -vx;
+            reflecting = true;
+            // 计算重叠程度
+            double overlapX = Math.min(ballRight - wallLeft, wallRight - ballLeft);
+            double overlapY = Math.min(ballBottom - wallTop, wallBottom - ballTop);
+
+            // 反转较小重叠的方向
+            if (overlapX < overlapY) {
+                vx = -vx;
+                // 确保球不会嵌入墙内
+                // +-1 是为了防止重复碰撞
+                if (vx > 0) {
+                    x = (wallRight + 1) / App.CELL_SIZE;
+                } else { // 碰撞到右墙
+                    x = (wallLeft - 2 * radius - 1) / App.CELL_SIZE;
+                }
+            } else {
+                vy = -vy;
+                // 确保球不会嵌入墙内
+                if (vy > 0) {
+                    // 碰撞到上墙
+                    y = (wallBottom - App.TOP_BAR_HEIGHT) / App.CELL_SIZE;
+                } else {
+                    // 碰撞到下墙
+                    y = (wallTop - App.TOP_BAR_HEIGHT - 2 * radius) / App.CELL_SIZE;
+                }
+            }
+
+            return;
         }
 
-        // 垂直碰撞检测（上或下墙）
-        if ((ballTop <= wallBottom && vy < 0) || (ballBottom >= wallTop && vy > 0)) {
-            // 反转垂直速度
-            vy = -vy;
-        }
+        reflecting = false;
     }
 
     public void checkCollision(InkLine inkLine) {
@@ -97,7 +121,20 @@ public class Ball extends GameObject implements Updatable, Colorable, Cloneable 
     }
 
     public void checkHoleCollision(Hole hole) {
-        // 检查是否接近洞口
+        if (isCaptured) {
+            return;
+        }
+
+        if (!hole.captureBall(this)) {
+            return;
+        }
+
+        isCaptured = true;
+        if (hole.getColor() != color) {
+            App.getInstance().getGame().subtractScore(App.getInstance().getGame().getConfigService().getConfig().getScoreDecrement().get(color));
+        } else {
+            App.getInstance().getGame().addScore(App.getInstance().getGame().getConfigService().getConfig().getScoreIncrement().get(color));
+        }
     }
 
     @Override

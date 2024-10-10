@@ -1,16 +1,18 @@
 package inkball.service.impl;
 
 import inkball.model.InkLine;
+import inkball.service.IInkLineService;
 import processing.core.PApplet;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author SanseYooyea
  */
-public class InkLineServiceImpl {
-    private final ArrayList<InkLine> lines;
-    private PApplet sketch;
+public class InkLineServiceImpl implements IInkLineService {
+    private final List<InkLine> lines;
+    private final PApplet sketch;
     private boolean drawing = false;
     private InkLine newLine = null;
 
@@ -19,6 +21,7 @@ public class InkLineServiceImpl {
         this.sketch = sketch;
     }
 
+    @Override
     public void draw(int mouseX, int mouseY, int pmouseX, int pmouseY) {
         if (!drawing) {
             return;
@@ -35,6 +38,7 @@ public class InkLineServiceImpl {
         newLine.update();
     }
 
+    @Override
     public void startDraw(int mouseX, int mouseY) {
         drawing = true;
         newLine = new InkLine(sketch);
@@ -45,11 +49,13 @@ public class InkLineServiceImpl {
         }
     }
 
+    @Override
     public void stopDraw() {
         drawing = false;
         newLine = null;
     }
 
+    @Override
     public void stopDraw(boolean ifHit) {
         if (!ifHit) {
             return;
@@ -59,6 +65,7 @@ public class InkLineServiceImpl {
         newLine = null;
     }
 
+    @Override
     public void stopDraw(InkLine hit) {
         if (newLine == hit) {
             for (InkLine i : lines) {
@@ -78,23 +85,18 @@ public class InkLineServiceImpl {
         }
     }
 
+    @Override
     public void update() {
         lines.forEach(InkLine::update);
     }
 
-    public void setSketch(PApplet sketch) {
-        this.sketch = sketch;
-    }
-
+    @Override
     public void clear() {
         this.lines.clear();
     }
 
-    public int getLinesLength() {
-        return lines.size();
-    }
-
-    public InkLine getLine(int index) {
-        return lines.get(index);
+    @Override
+    public List<InkLine> getLines() {
+        return lines;
     }
 }
