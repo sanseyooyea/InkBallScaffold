@@ -1,5 +1,6 @@
 package inkball.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
@@ -23,5 +24,9 @@ public class BallQueue {
 
     public boolean isEmpty() {
         return ballQueue.isEmpty();
+    }
+
+    public List<Color> getLeftBalls() {
+        return new ArrayList<>(ballQueue);
     }
 }

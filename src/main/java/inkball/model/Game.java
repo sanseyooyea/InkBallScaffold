@@ -7,6 +7,8 @@ import inkball.service.impl.ConfigServiceImpl;
 import inkball.service.impl.InkLineServiceImpl;
 import processing.core.PApplet;
 
+import java.util.List;
+
 /**
  * @author SanseYooyea
  */
@@ -34,6 +36,10 @@ public class Game {
         this.score = 0;
         this.isPaused = false;
         end = false;
+    }
+
+    public List<Color> getLeftBalls() {
+        return ballQueue.getLeftBalls();
     }
 
     public double getScore() {

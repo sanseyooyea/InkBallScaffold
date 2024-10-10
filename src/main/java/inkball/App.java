@@ -1,6 +1,7 @@
 package inkball;
 
 import inkball.model.Game;
+import inkball.model.GameObjectType;
 import inkball.view.Image;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -113,8 +114,11 @@ public class App extends PApplet {
         fill(206, 206, 206);
         rect(0, 0, WIDTH, TOP_BAR_HEIGHT);
 
+        // draw queue
         fill(0, 0, 0);
         rect(8, 8, 160, 32);
+        game.getLeftBalls().forEach(color -> image(Image.getImage(GameObjectType.BALL, color.getNumber()).getImage(), 8 + 32 * game.getLeftBalls().indexOf(color), 8));
+
 
         textSize(16);
         text(String.valueOf(game.getCurrentLevel().getScoreIncrementModifier()), 192, 40);
