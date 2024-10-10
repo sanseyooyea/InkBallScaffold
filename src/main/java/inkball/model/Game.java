@@ -18,6 +18,7 @@ public class Game {
     private Level currentLevel;
     private float timeLeft;
     private BallQueue ballQueue;
+    private float ballSpawnTime;
     private boolean isPaused;
     private boolean end;
 
@@ -29,6 +30,7 @@ public class Game {
         currentLevel = configService.getConfig().getLevels().get(currentLevelNumber).clone();
         timeLeft = currentLevel.getTime();
         ballQueue = new BallQueue(currentLevel.getBalls());
+        ballSpawnTime = currentLevel.getSpawnInterval();
         this.score = 0;
         this.isPaused = false;
         end = false;
@@ -83,7 +85,7 @@ public class Game {
 
         currentLevel.update();
 
-        if (currentLevel.getLayout().isAllBallsCaptured()) {
+        if (currentLevel.getLayout().isAllBallsCaptured() && ballQueue.isEmpty()) {
             nextLevel();
             return;
         }
@@ -91,6 +93,23 @@ public class Game {
         timeLeft -= (float) 1 / App.FPS;
         if (timeLeft <= 0) {
             end();
+        }
+
+        ballSpawnTime -= (float) 1 / App.FPS;
+        if (ballSpawnTime <= 0) {
+            for (Spawner spawner : currentLevel.getLayout().getSpawners()) {
+                if (ballQueue.isEmpty()) {
+                    break;
+                }
+
+                Color color = ballQueue.getBall();
+                if (color != null) {
+                    Ball ball = spawner.spawnBall(color);
+                    currentLevel.getLayout().getBalls().add(ball);
+                }
+            }
+
+            ballSpawnTime = currentLevel.getSpawnInterval();
         }
     }
 

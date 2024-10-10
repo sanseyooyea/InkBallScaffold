@@ -20,4 +20,8 @@ public class BallQueue {
     public Color getBall() {
         return ballQueue.poll();
     }
+
+    public boolean isEmpty() {
+        return ballQueue.isEmpty();
+    }
 }
