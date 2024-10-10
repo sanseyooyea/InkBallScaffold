@@ -4,6 +4,7 @@ import processing.core.PApplet;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author SanseYooyea
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 public class InkLine implements Updatable {
     public final float lineThickness = 5;
     private final PApplet sketch;
-    public ArrayList<Line> line;
+    public List<Line> line;
 
     public InkLine(PApplet sketch) {
         this.sketch = sketch;

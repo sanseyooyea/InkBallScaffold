@@ -1,10 +1,12 @@
 package inkball.service.impl;
 
+import inkball.App;
 import inkball.model.InkLine;
 import inkball.service.IInkLineService;
 import processing.core.PApplet;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -28,6 +30,10 @@ public class InkLineServiceImpl implements IInkLineService {
         }
 
         if (mouseX < 0 || mouseY < 0) {
+            return;
+        }
+
+        if (mouseY <= App.TOP_BAR_HEIGHT || pmouseY <= App.TOP_BAR_HEIGHT) {
             return;
         }
 
@@ -68,18 +74,22 @@ public class InkLineServiceImpl implements IInkLineService {
     @Override
     public void stopDraw(InkLine hit) {
         if (newLine == hit) {
-            for (InkLine i : lines) {
+            Iterator<InkLine> iterator = lines.iterator();
+            while (iterator.hasNext()) {
+                InkLine i = iterator.next();
                 if (i == hit) {
-                    lines.remove(hit);
+                    iterator.remove();
                     break;
                 }
             }
             stopDraw();
         } else {
-            for (InkLine i : lines) {
+            Iterator<InkLine> iterator = lines.iterator();
+            while (iterator.hasNext()) {
+                InkLine i = iterator.next();
                 if (i == hit) {
-                    lines.remove(hit);
-                    return;
+                    iterator.remove();
+                    break;
                 }
             }
         }

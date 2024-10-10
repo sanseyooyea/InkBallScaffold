@@ -3,6 +3,7 @@ package inkball.model;
 import inkball.App;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.geom.Point2D;
 import java.util.Random;
 
 /**
@@ -116,8 +117,78 @@ public class Ball extends GameObject implements Updatable, Colorable, Cloneable 
         reflecting = false;
     }
 
-    public void checkCollision(InkLine inkLine) {
-        // 检查与玩家画线的碰撞
+    public boolean checkCollision(InkLine inkLine) {
+        boolean colliding = false;
+        for (InkLine.Line lineSegment : inkLine.line) {
+            // 检查与当前线段的碰撞
+            if (isCollidingWithLine(lineSegment)) {
+                reflectFromLine(lineSegment);
+                colliding = true;
+                break; // 只处理一次碰撞
+            }
+        }
+
+        return colliding;
+    }
+
+    private boolean isCollidingWithLine(InkLine.Line lineSegment) {
+        // 获取球心位置
+        double ballX = x * App.CELL_SIZE + radius;
+        double ballY = y * App.CELL_SIZE + radius + App.TOP_BAR_HEIGHT;
+        double radius = this.radius;
+
+        // 线段的起点和终点
+        Point2D start = lineSegment.start;
+        Point2D end = lineSegment.end;
+
+        // 计算线段的长度
+        double lineLength = start.distance(end);
+        // 线段无效
+        if (lineLength == 0) return false;
+
+        // 计算参数t以获取最近点
+        double t = ((ballX - start.getX()) * (end.getX() - start.getX()) +
+                (ballY - start.getY()) * (end.getY() - start.getY())) /
+                (lineLength * lineLength);
+
+        // 限制t的范围在0到1之间
+        t = Math.max(0, Math.min(1, t));
+
+        // 计算最近点的坐标
+        double closestX = start.getX() + t * (end.getX() - start.getX());
+        double closestY = start.getY() + t * (end.getY() - start.getY());
+
+        // 计算球心到最近点的距离
+        double distance = Point2D.distance(ballX, ballY, closestX, closestY);
+        // 如果距离小于半径，则发生碰撞
+        return distance < radius;
+    }
+
+    private void reflectFromLine(InkLine.Line lineSegment) {
+        // 线段的方向向量
+        double dx = lineSegment.end.getX() - lineSegment.start.getX();
+        double dy = lineSegment.end.getY() - lineSegment.start.getY();
+
+        // 线段的法线向量
+        double normalX = -dy;
+        double normalY = dx;
+
+        // 归一化法线
+        double length = Math.sqrt(normalX * normalX + normalY * normalY);
+        normalX /= length;
+        normalY /= length;
+
+        // 计算反射向量
+        double dotProduct = vx * normalX + vy * normalY;
+        vx -= 2 * dotProduct * normalX;
+        vy -= 2 * dotProduct * normalY;
+
+        // 确保球不会嵌入线段内
+        // 将球移到线段外侧
+        // 假设要移出的距离为半径
+//        double overlap = radius;
+//        x += normalX * overlap;
+//        y += normalY * overlap;
     }
 
     public void checkHoleCollision(Hole hole) {

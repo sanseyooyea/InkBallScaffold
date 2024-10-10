@@ -1,5 +1,7 @@
 package inkball.model;
 
+import inkball.App;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +57,16 @@ public class Layout implements Cloneable {
         // 检查球与墙壁、洞口的碰撞
         walls.forEach(ball::checkCollision);
         holes.forEach(ball::checkHoleCollision);
+        InkLine collisionLine = null;
+        for (InkLine line : App.getInstance().getGame().getInkLineService().getLines()) {
+            if (ball.checkCollision(line)) {
+                collisionLine = line;
+            }
+        }
+
+        if (collisionLine != null) {
+            App.getInstance().getGame().getInkLineService().stopDraw(collisionLine);
+        }
     }
 
     public boolean isAllBallsCaptured() {

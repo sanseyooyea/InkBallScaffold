@@ -132,7 +132,7 @@ public class App extends PApplet {
         }
 
         // draw balls
-        game.getCurrentLevel().getLayout().getBalls().forEach(ball -> image(Image.getImage(ball.getType(), ball.getColor().getNumber()).getImage(), (float) ball.getX() * CELL_SIZE, TOP_BAR_HEIGHT + (float) ball.getY() * CELL_SIZE));
+        game.getCurrentLevel().getLayout().getBalls().stream().filter(ball -> !ball.isCaptured()).forEach(ball -> image(Image.getImage(ball.getType(), ball.getColor().getNumber()).getImage(), (float) ball.getX() * CELL_SIZE, TOP_BAR_HEIGHT + (float) ball.getY() * CELL_SIZE));
 
         // draw walls
         game.getCurrentLevel().getLayout().getWalls().forEach(wall -> {
