@@ -9,6 +9,8 @@ import org.jetbrains.annotations.Nullable;
 public class Wall extends GameObject implements Colorable {
     @Nullable
     private Color color;
+    @Nullable
+    private Color originalColor;
 
     public Wall(double x, double y) {
         super(GameObjectType.WALL, x, y);
@@ -17,10 +19,7 @@ public class Wall extends GameObject implements Colorable {
     public Wall(double x, double y, @NotNull Color color) {
         super(GameObjectType.WALL, x, y);
         this.color = color;
-    }
-
-    public void reflectBall(Ball ball) {
-        // 处理与球的反射逻辑
+        this.originalColor = color;
     }
 
     @Override
@@ -31,5 +30,9 @@ public class Wall extends GameObject implements Colorable {
 
     public void setColor(@NotNull Color color) {
         this.color = color;
+    }
+
+    public void resetColor() {
+        this.color = originalColor;
     }
 }
